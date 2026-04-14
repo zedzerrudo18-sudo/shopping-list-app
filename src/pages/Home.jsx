@@ -1,8 +1,56 @@
+import { useState } from "react";
 import { Box, Paper, Typography, TextField, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [formValues, setFormValues] = useState({
+    productName: "",
+    quantity: "",
+    category: "",
+  });
+  const [errors, setErrors] = useState({
+    productName: "",
+    quantity: "",
+    category: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = () => {
+    const nextErrors = {
+      productName: "",
+      quantity: "",
+      category: "",
+    };
+
+    if (!formValues.productName.trim()) {
+      nextErrors.productName = "Product Name is required";
+    }
+    if (!formValues.quantity.trim()) {
+      nextErrors.quantity = "Quantity is required";
+    }
+    if (!formValues.category.trim()) {
+      nextErrors.category = "Category is required";
+    }
+
+    setErrors(nextErrors);
+    return Object.values(nextErrors).every((value) => value === "");
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!validate()) {
+      return;
+    }
+
+    console.log("Submitted form values:", formValues);
+    setFormValues({ productName: "", quantity: "", category: "" });
+    setErrors({ productName: "", quantity: "", category: "" });
+  };
 
   return (
     <Box
@@ -15,36 +63,52 @@ export default function Home() {
         p: 2,
       }}
     >
-      <Paper sx={{ p: 3, width: "100%", maxWidth: 500 }}>
-        
-        {/* TITLE (IMPORTANT PART NI LAI san) */}
+      <Paper sx={{ p: 3, width: "100%", maxWidth: 520 }}>
         <Typography variant="h4" align="center" gutterBottom>
           Shopping List 🛒
         </Typography>
 
-        {/* INPUT AREA */}
-        <Stack spacing={2}>
-          <TextField label="Product Name" fullWidth />
+        <Box component="form" noValidate onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              label="Product Name"
+              name="productName"
+              value={formValues.productName}
+              onChange={handleChange}
+              error={Boolean(errors.productName)}
+              helperText={errors.productName}
+              fullWidth
+            />
 
-          <Button variant="contained">
-            Search
-          </Button>
+            <TextField
+              label="Quantity"
+              name="quantity"
+              value={formValues.quantity}
+              onChange={handleChange}
+              error={Boolean(errors.quantity)}
+              helperText={errors.quantity}
+              fullWidth
+            />
 
-          <Button
-            variant="outlined"
-            onClick={() => navigate("/register")}
-          >
-            Register Product
-          </Button>
+            <TextField
+              label="Category"
+              name="category"
+              value={formValues.category}
+              onChange={handleChange}
+              error={Boolean(errors.category)}
+              helperText={errors.category}
+              fullWidth
+            />
 
-          {/* PRODUCT LIST AREA */}
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <Typography variant="body1">
-              No products yet
-            </Typography>
-          </Paper>
-        </Stack>
+            <Button type="submit" variant="contained" size="large">
+              Submit
+            </Button>
 
+            <Button variant="outlined" onClick={() => navigate("/register")}> 
+              Register Product
+            </Button>
+          </Stack>
+        </Box>
       </Paper>
     </Box>
   );
