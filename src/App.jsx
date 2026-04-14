@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline, Container, Paper, Typography, Box, ButtonGroup, Button, TextField } from "@mui/material";
-import TodoInput from "./components/TodoInput";
-import TodoList from "./components/TodoList";
+
 
 function App() {
   const theme = createTheme({
