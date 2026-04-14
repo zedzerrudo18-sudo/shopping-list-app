@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { CssBaseline, Container, Paper, Typography, Box, ButtonGroup, Button, TextField } from "@mui/material";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#667eea',
+      },
+      secondary: {
+        main: '#764ba2',
+      },
+    },
+  });
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem("shoppingList");
     return saved ? JSON.parse(saved) : [];
@@ -79,59 +91,46 @@ function App() {
     );
 
   return (
-    <div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    background: "linear-gradient(135deg, #667eea, #764ba2)",
-    padding: "20px",
-  }}
->
-      <div
-  style={{
-    background: "white",
-    padding: "25px",
-    borderRadius: "16px",
-    width: "420px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-  }}
->
-        <h1 style={{ textAlign: "center", marginBottom: "15px" }}>
-          Shopping List 🛒
-        </h1>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="sm" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #667eea, #764ba2)', py: 4 }}>
+        <Paper elevation={3} sx={{ p: 3, width: '100%', borderRadius: 2 }}>
+          <Typography variant="h4" component="h1" gutterBottom align="center">
+            Shopping List 🛒
+          </Typography>
 
         {/* FILTER BUTTONS */}
-        <div style={{
-  padding: "8px 12px",
-  margin: "4px",
-  border: "none",
-  borderRadius: "8px",
-  cursor: "pointer",
-  background: "#667eea",
-  color: "white"
-}}>
-          <button onClick={() => setFilter("all")}>All</button>
-          <button onClick={() => setFilter("active")}>Active</button>
-          <button onClick={() => setFilter("completed")}>
-            Completed
-          </button>
-        </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <ButtonGroup variant="outlined" aria-label="filter buttons">
+            <Button
+              variant={filter === 'all' ? 'contained' : 'outlined'}
+              onClick={() => setFilter('all')}
+            >
+              All
+            </Button>
+            <Button
+              variant={filter === 'active' ? 'contained' : 'outlined'}
+              onClick={() => setFilter('active')}
+            >
+              Active
+            </Button>
+            <Button
+              variant={filter === 'completed' ? 'contained' : 'outlined'}
+              onClick={() => setFilter('completed')}
+            >
+              Completed
+            </Button>
+          </ButtonGroup>
+        </Box>
 
         {/* SEARCH */}
-        <input
+        <TextField
+          fullWidth
+          variant="outlined"
           placeholder="Search item..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-  width: "100%",
-  padding: "10px",
-  borderRadius: "10px",
-  border: "1px solid #ddd",
-  outline: "none",
-  marginBottom: "10px"
-}}
+          sx={{ mb: 2 }}
         />
 
         {/* INPUT */}
@@ -151,11 +150,10 @@ function App() {
           editText={editText}
           setEditText={setEditText}
           saveEdit={saveEdit}
-          onMouseOver={(e) => e.currentTarget.style.background = "#eee"}
-onMouseOut={(e) => e.currentTarget.style.background = "#f9f9f9"}
         />
-      </div>
-    </div>
+      </Paper>
+    </Container>
+    </ThemeProvider>
   );
 }
 
