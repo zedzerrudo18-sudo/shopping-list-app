@@ -4,14 +4,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     productName: "",
-    quantity: "",
+    price: "",
+    stock: "",
     category: "",
   });
+
   const [errors, setErrors] = useState({
     productName: "",
-    quantity: "",
+    price: "",
+    stock: "",
     category: "",
   });
 
@@ -20,18 +24,23 @@ export default function Home() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ✅ FIXED validate function
   const validate = () => {
     const nextErrors = {
       productName: "",
-      quantity: "",
+      price: "",
+      stock: "",
       category: "",
     };
 
     if (!formValues.productName.trim()) {
       nextErrors.productName = "Product Name is required";
     }
-    if (!formValues.quantity.trim()) {
-      nextErrors.quantity = "Quantity is required";
+    if (!formValues.price.trim()) {
+      nextErrors.price = "Price is required";
+    }
+    if (!formValues.stock.trim()) {
+      nextErrors.stock = "Stock is required";
     }
     if (!formValues.category.trim()) {
       nextErrors.category = "Category is required";
@@ -43,13 +52,28 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!validate()) {
-      return;
-    }
 
-    console.log("Submitted form values:", formValues);
-    setFormValues({ productName: "", quantity: "", category: "" });
-    setErrors({ productName: "", quantity: "", category: "" });
+    if (!validate()) return;
+
+    const newProduct = {
+      name: formValues.productName,
+      price: Number(formValues.price),
+      stock: Number(formValues.stock),
+      category: formValues.category,
+    };
+
+    console.log("New Product:", newProduct);
+
+    // TODO: add to product list state
+
+    navigate("/");
+
+    setFormValues({
+      productName: "",
+      price: "",
+      stock: "",
+      category: "",
+    });
   };
 
   return (
@@ -81,12 +105,22 @@ export default function Home() {
             />
 
             <TextField
-              label="Quantity"
-              name="quantity"
-              value={formValues.quantity}
+              label="Price"
+              name="price"
+              value={formValues.price}
               onChange={handleChange}
-              error={Boolean(errors.quantity)}
-              helperText={errors.quantity}
+              error={Boolean(errors.price)}
+              helperText={errors.price}
+              fullWidth
+            />
+
+            <TextField
+              label="Stock"
+              name="stock"
+              value={formValues.stock}
+              onChange={handleChange}
+              error={Boolean(errors.stock)}
+              helperText={errors.stock}
               fullWidth
             />
 
@@ -104,8 +138,19 @@ export default function Home() {
               Submit
             </Button>
 
-            <Button variant="outlined" onClick={() => navigate("/register")}> 
+            <Button
+              variant="outlined"
+              onClick={() => navigate("/register")}
+            >
               Register Product
+            </Button>
+
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => navigate("/")}
+            >
+              Cancel
             </Button>
           </Stack>
         </Box>
