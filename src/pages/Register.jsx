@@ -12,9 +12,9 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export default function Register({ products = [], setProducts }) {
-  const navigate = useNavigate(); // pang navigate padulong Home page
+  const navigate = useNavigate();
 
-  // state para sa form inputs
+  //  form state (inputs sa user)
   const [formValues, setFormValues] = useState({
     productName: "",
     price: "",
@@ -23,33 +23,36 @@ export default function Register({ products = [], setProducts }) {
     status: "Pending",
   });
 
-  // state para sa error messages
+  //  error state
   const [errors, setErrors] = useState({});
 
-  // update sa values kada type sa user
+  //  update input values
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  // validation sa form
+  //  validation logic
   const validate = () => {
     const nextErrors = {};
 
-    // required field check
-    if (!formValues.productName.trim())
+    if (!formValues.productName.trim()) {
       nextErrors.productName = "Required";
+    }
 
-    if (!formValues.price.trim())
+    if (!formValues.price.trim()) {
       nextErrors.price = "Required";
+    }
 
-    if (!formValues.stock.trim())
+    if (!formValues.stock.trim()) {
       nextErrors.stock = "Required";
+    }
 
-    if (!formValues.category.trim())
+    if (!formValues.category.trim()) {
       nextErrors.category = "Required";
+    }
 
-    // duplicate check (Pending ra ang bawal)
+    //  duplicate check (Pending only)
     const duplicate = products.find(
       (p) =>
         p.name.toLowerCase() === formValues.productName.toLowerCase() &&
@@ -65,20 +68,19 @@ export default function Register({ products = [], setProducts }) {
     return Object.keys(nextErrors).length === 0;
   };
 
-  // submit sa form
+  //  submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // kung naay error, stop
     if (!validate()) return;
 
-    // bawal negative values (price ug quantity)
+    //  STRICT negative value protection
     if (Number(formValues.price) < 0 || Number(formValues.stock) < 0) {
-      alert("Dili pwede negative values");
+      alert("Negative values are not allowed");
       return;
     }
 
-    // himo bag-ong product object
+    //  create product object
     const newProduct = {
       name: formValues.productName,
       price: Number(formValues.price),
@@ -88,13 +90,13 @@ export default function Register({ products = [], setProducts }) {
       createdAt: new Date().toISOString().slice(0, 10),
     };
 
-    // i-add sa product list
+    //  add to product list
     setProducts((prev) => [...prev, newProduct]);
 
-    // balik sa Home page
+    //  go back to home
     navigate("/");
 
-    // reset form after submit
+    //  reset form
     setFormValues({
       productName: "",
       price: "",
@@ -108,7 +110,7 @@ export default function Register({ products = [], setProducts }) {
     <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
       <Paper sx={{ p: 3, width: 400 }}>
 
-        {/* title sa page */}
+        {/*  title */}
         <Typography variant="h5" align="center" gutterBottom>
           Register Product
         </Typography>
@@ -116,7 +118,7 @@ export default function Register({ products = [], setProducts }) {
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={2}>
 
-            {/* product name input */}
+            {/*  product name */}
             <TextField
               label="Product Name"
               name="productName"
@@ -127,7 +129,7 @@ export default function Register({ products = [], setProducts }) {
               fullWidth
             />
 
-            {/* price input with currency */}
+            {/*  price with currency */}
             <TextField
               label="Price"
               name="price"
@@ -144,13 +146,13 @@ export default function Register({ products = [], setProducts }) {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    ₱
+                    $
                   </InputAdornment>
                 ),
               }}
             />
 
-            {/* quantity input (stock = quantity) */}
+            {/*  quantity */}
             <TextField
               label="Quantity"
               name="stock"
@@ -166,7 +168,7 @@ export default function Register({ products = [], setProducts }) {
               }}
             />
 
-            {/* category dropdown */}
+            {/*  category */}
             <TextField
               select
               label="Category"
@@ -184,7 +186,7 @@ export default function Register({ products = [], setProducts }) {
               <MenuItem value="Others">Others</MenuItem>
             </TextField>
 
-            {/* status dropdown */}
+            {/*  status */}
             <TextField
               select
               label="Status"
@@ -197,12 +199,12 @@ export default function Register({ products = [], setProducts }) {
               <MenuItem value="Bought">Bought</MenuItem>
             </TextField>
 
-            {/* register button */}
+            {/*  register button */}
             <Button type="submit" variant="contained" fullWidth>
               Register
             </Button>
 
-            {/* cancel button */}
+            {/*  cancel button */}
             <Button
               variant="outlined"
               fullWidth
