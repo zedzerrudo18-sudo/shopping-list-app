@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function Register({ setProducts }) {
+export default function Register({ products = [], setProducts }) {
   const navigate = useNavigate(); // pang navigation padulong Home
 
   //   state para sa form inputs
@@ -19,6 +19,7 @@ export default function Register({ setProducts }) {
     price: "",
     stock: "",
     category: "",
+    status: "Pending",
   });
 
   //   state para sa errors
@@ -30,7 +31,7 @@ export default function Register({ setProducts }) {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  //  validation sa tanang fields
+  //  validation sa tanang fields + duplicate check based on status
   const validate = () => {
     const nextErrors = {};
 
@@ -45,6 +46,22 @@ export default function Register({ setProducts }) {
 
     if (!formValues.category.trim())
       nextErrors.category = "Required";
+
+    //  duplicate product name validation
+    //  prevent duplicate only if existing product has "Pending" status
+    //  allow duplicate if existing product has "Bought" status
+    if (formValues.productName.trim()) {
+      const duplicateProduct = products.find(
+        (p) =>
+          p.name.toLowerCase() === formValues.productName.toLowerCase() &&
+          p.status === "Pending"
+      );
+
+      if (duplicateProduct) {
+        nextErrors.productName =
+          "Product name already exists with Pending status";
+      }
+    }
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -63,6 +80,8 @@ export default function Register({ setProducts }) {
       price: Number(formValues.price),
       stock: Number(formValues.stock),
       category: formValues.category,
+      status: formValues.status,
+      createdTime: new Date().toLocaleDateString(),
     };
 
     //  idugang sa produuct list(state sa App.jsx)
@@ -77,6 +96,7 @@ export default function Register({ setProducts }) {
       price: "",
       stock: "",
       category: "",
+      status: "Pending",
     });
   };
 
@@ -143,6 +163,19 @@ export default function Register({ setProducts }) {
               <MenuItem value="Daily Product">Fruit</MenuItem>
               <MenuItem value="Electronics">Electronics</MenuItem>
               <MenuItem value="Others">Others</MenuItem>
+            </TextField>
+
+            {/*  status dropdown */}
+            <TextField
+              select
+              label="Status"
+              name="status"
+              value={formValues.status}
+              onChange={handleChange}
+              fullWidth
+            >
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Bought">Bought</MenuItem>
             </TextField>
 
             {/*  register button */}

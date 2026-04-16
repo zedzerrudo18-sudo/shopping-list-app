@@ -10,7 +10,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home products={products} />} />
-        <Route path="/register" element={<Register setProducts={setProducts} />} />
+        <Route path="/register" element={<Register products={products} setProducts={setProducts} />} />
       </Routes>
     </BrowserRouter>
   );
