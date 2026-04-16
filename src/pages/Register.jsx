@@ -140,7 +140,7 @@ export default function Register({ setProducts }) {
             >
               <MenuItem value="Food">Food</MenuItem>
               <MenuItem value="Drink">Drink</MenuItem>
-              <MenuItem value="Daily Product">Daily Product</MenuItem>
+              <MenuItem value="Daily Product">Fruit</MenuItem>
               <MenuItem value="Electronics">Electronics</MenuItem>
               <MenuItem value="Others">Others</MenuItem>
             </TextField>
