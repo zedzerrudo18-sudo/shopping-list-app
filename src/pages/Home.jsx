@@ -208,18 +208,18 @@ export default function Home({ products = [] }) {
                     {/*  price column */}
                     <TableCell sx={{ py: 2 }} align="right">
                       <Typography sx={{ fontWeight: 500 }}>
-                        ₱{product.price}
+                        ₱{Number(product.price).toFixed(2)}
                       </Typography>
                     </TableCell>
 
                     {/*  quantity column */}
                     <TableCell sx={{ py: 2 }} align="center">
-                      {product.stock}
+                      {product.quantity}
                     </TableCell>
 
                     {/*  created time column */}
                     <TableCell sx={{ py: 2 }} align="center">
-                      {product.createdTime || new Date().toLocaleDateString()}
+                      {product.createdAt || new Date().toISOString().slice(0, 10)}
                     </TableCell>
 
                     {/*  actions column */}
