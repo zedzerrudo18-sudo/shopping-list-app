@@ -24,6 +24,7 @@ import {
   Stack,
   Card,
   Grid,
+  Snackbar,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -48,6 +49,8 @@ export default function Home() {
   const [sortBy, setSortBy] = useState('productName');
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   // Filter products based on search query
   const filteredProducts = useMemo(() => {
@@ -119,12 +122,16 @@ export default function Home() {
 
   // Handle confirm delete
   const handleConfirmDelete = () => {
-    if (selectedProduct) {
-      deleteProduct(selectedProduct.id);
-      setOpenDeleteDialog(false);
-      setSelectedProduct(null);
-    }
-  };
+  if (selectedProduct) {
+    deleteProduct(selectedProduct.id);
+    setOpenDeleteDialog(false);
+    setSelectedProduct(null);
+
+    // show success message
+    setSnackbarMessage('Product deleted successfully');
+    setSnackbarOpen(true);
+  }
+};
 
   // Get status badge
   const getStatusBadge = (status) => {
@@ -585,6 +592,14 @@ export default function Home() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarMessage}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      />
 
       {/* Floating Action Button */}
       <Fab
