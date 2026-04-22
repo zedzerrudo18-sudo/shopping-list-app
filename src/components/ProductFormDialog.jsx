@@ -134,19 +134,28 @@ export default function ProductFormDialog({
             name="price"
             type="number"
             value={formValues.price}
-            onChange={handleChange}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              // 🚫 block negative input
+              if (value < 0) return;
+
+              handleChange(e);
+            }}
             error={!!errors.price}
             helperText={errors.price}
-            placeholder="0.00"
-            inputProps={{
-              step: '0.01',
-              min: '0',
-              style: { textAlign: 'right' },
+            disabled={isSubmitting}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+                inputProps: {
+                  min: 0,   // 🔥 extra protection
+                  style: { textAlign: "right" },
+                },
+              },
             }}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
-            }}
-            variant="outlined"
           />
 
           {/* Quantity */}
@@ -156,16 +165,25 @@ export default function ProductFormDialog({
             name="quantity"
             type="number"
             value={formValues.quantity}
-            onChange={handleChange}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              // 🚫 block negative input
+              if (value < 0) return;
+
+              handleChange(e);
+            }}
             error={!!errors.quantity}
             helperText={errors.quantity}
-            placeholder="0"
-            inputProps={{
-              step: '1',
-              min: '0',
-              style: { textAlign: 'right' },
-            }}
+            disabled={isSubmitting}
             variant="outlined"
+            slotProps={{
+              htmlInput: {
+                step: 1,
+                min: 0,
+                style: { textAlign: "right" }
+              }
+            }}
           />
 
           {/* Category */}
@@ -243,5 +261,5 @@ export default function ProductFormDialog({
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  ); 
 }
