@@ -369,6 +369,10 @@ console.log("sorted:", sortedProducts);
                     <MenuItem value="">All</MenuItem>
                     <MenuItem value="Daily Product">Daily Product</MenuItem>
                     <MenuItem value="Electronics">Electronics</MenuItem>
+                    <MenuItem value="Food">Food</MenuItem>
+                    <MenuItem value="Drink">Drink</MenuItem>
+                    <MenuItem value="Clothing">Clothing</MenuItem>
+                    <MenuItem value="Others">Others</MenuItem>
                   </TextField>
 
                   <TextField
